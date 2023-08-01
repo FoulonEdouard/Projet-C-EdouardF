@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/edouard/ProjetLibGD/main.c
+stdio.h
+-
+gd.h
+/home/edouard/ProjetLibGD/gd.h
+string.h
+-
+stdlib.h
+-
+
