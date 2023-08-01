@@ -5,12 +5,13 @@
 #include <gdfontl.h>      // Pour le fontptr lors de l'écriture sur l'image
 
 
+//Fonction main avec le programme
 
 int main() {
 
-  // Valeurs déjà initialisé pour travaillé sur le projet, en commentaire si non utilisées*/
-  /*
-   float w=20;
+  // Valeurs déjà initialisées pour travaillé sur le projet, en commentaire si non utilisées*/
+
+/*   float w=20;
    float a=20;
    float b=20;
    float u=20;
@@ -21,18 +22,19 @@ int main() {
    char *s3="Valeur 3";
    char *s4="Valeur 4";
    char *s5="valeur 5";
-   */
+*/
 
 //Variables textes pour le titre puis des 5 variables, on peut enlever ou rajouter des variables à la main mais il faut modifié aussi pour l'appel et le graphique.
-    char s[20];
+   char s[20];
     char s1[20];
     char s2[20];
     char s3[20];
     char s4[20];
     char s5[20];
 
-//Appel du titre,des variables et leurs valeurs en %. On appelle tout en 1 mot sans espace puis entrée pour passer à la suivante.
+//Appel du titre,des variables et leurs valeurs en %. On appelle tout en 1 mot (ou relié par un -) sans espace puis touche entrée pour passer à la suivante.
 //On peut modifié la taille si on souhaite plus de caractère pour une châine de caractère donnée dans les [].
+
     printf("Donner le titre du Pie Chart:\n");
     scanf("%s",s);
     printf("Entrer le nom de la première valeur et son pourcentage:\n");
@@ -59,11 +61,19 @@ int main() {
 //Variables de conversion pour que les % puissent être adaptés à un cercle
 
    float convw=(w/100)*360;
-   float convx=(a/100)*360;
-   float convy=(b/100)*360;
+   float conva=(a/100)*360;
+   float convb=(b/100)*360;
    float convu=(u/100)*360;
    float convz=(z/100)*360;
+   float total=convw+conva+convb+convu+convz;
 
+//Ne continue pas si le total est supérieur à 100%
+   if(total != 360)
+   {printf("\n Le total est supérieur à 100 pourcents le Pie Chart ne peut être remplit correctement\n");}
+
+//Exécute le programme si on est à 100% ou moins (il restera une partie blanche dans ce cas).
+   else if(total <= 360)
+   {
   /* tout ce qui concerne le graphique */
 
   // Création de l'image et du d'un fichier png.
@@ -76,8 +86,30 @@ int main() {
 
   // Allocation sur des variables pour la couleurs définie selon un code R,V,B tel que gdImageColorAllocate(im,rouge,vert,bleu)
 
-  int black,white,red,green,blue,orange,gris;
+  int black,white,red,green,blue,orange,gris,marron,grisclair,grisfonce;
 
+  //Appel choix couleur d'arrière plan
+  printf("\nQuelle couleur d'arrière plan souhaitez vous entre le 1= blanc/2=grisclair/3=grisfoncé (taper le numéro)\n");
+  int colo;
+  scanf("%d",&colo);
+
+  if(colo==1)
+  {int white;
+  white = gdImageColorAllocate(im, 255, 255, 255);
+  }
+
+  if(colo==2)
+  {int grisclair;
+   grisclair=gdImageColorAllocate(im, 230, 230, 230);
+  }
+
+  if(colo==3)
+  {int grisfonce;
+  grisfonce=gdImageColorAllocate(im, 100, 100, 100);
+  }
+
+
+// Liste couleurs réutilisées par la suite ou pouvant servir
   white = gdImageColorAllocate(im, 255, 255, 255);
   black = gdImageColorAllocate(im, 0, 0, 0);
   red = gdImageColorAllocate(im, 255, 0, 0);
@@ -85,6 +117,7 @@ int main() {
   blue = gdImageColorAllocate(im, 0, 0, 255);
   orange= gdImageColorAllocate(im, 255, 128, 0);
   gris=gdImageColorAllocate(im, 128, 128, 128);
+  marron=gdImageColorAllocate(im, 88, 41, 0);
 
   // Ecriture du titre et des légendes:
 
@@ -100,7 +133,7 @@ int main() {
       foreground2 =gdImageColorAllocate(im, 0, 0, 255);
       foreground3=gdImageColorAllocate(im, 255, 128, 0);
       foreground4=gdImageColorAllocate(im, 0, 255, 0);
-      foreground5=gdImageColorAllocate(im, 128,128,128);
+      foreground5=gdImageColorAllocate(im, 88, 41, 0);
 
   //Ecriture du titre avec syntaxe gdImageString (im,fontptr,x,y,unsigned char*,foreground); on peut modifié son emplacement en changeant les valeurs x et y.
       gdImageString(im, fontptr,
@@ -139,20 +172,23 @@ int main() {
               390,
               450 ,
               (unsigned char*)s5, foreground5);
-      gdImageLine(im,370,460,380,460,gris);
+      gdImageLine(im,370,460,380,460,marron);
 
   /* Création des arcs de cercles et du contour:*/
 
   //Initialisation du rayon
   int cor_rad = 150;
 
+  //Création cercle blanc en fond pour exemple
+  gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, 360, 360, white, gdPie);
+
   //Création des arcs de cercles qui se mettent à la suite en rajoutant à chaque fois un % définit plus haut avec les variables conv
   //Syntaxe gdImageFilledArc(im,xcentre,ycentre,largeur,hauteur,angle initial,angle où va l'arc,color,style)
   gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, 360, convw, red, gdPie);
-  gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, convw, convx+convw, blue, gdPie);
-  gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, convx+convw, convw+convx+convy, orange, gdPie);
-  gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, convw+convx+convy,convw+convx+convy+convu , green, gdPie);
-  gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, convw+convx+convy+convu, 360, gris, gdPie);
+  gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, convw, conva+convw, blue, gdPie);
+  gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, conva+convw, convw+conva+convb, orange, gdPie);
+  gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, convw+conva+convb,convw+conva+convb+convu , green, gdPie);
+  gdImageFilledArc (im,100 + cor_rad, 400 - cor_rad, cor_rad *2, cor_rad *2, convw+conva+convb+convu,convw+conva+convb+convu+convz , marron, gdPie);
 
   //Contour du cercle, gdImageEllipse(im,xcentre,ycentre,largeur,hauteur,color)
   gdImageEllipse(im,250,250,300,300,black);
@@ -165,6 +201,6 @@ int main() {
   //Fermeture et nettoyage mémoire
   fclose(pngout);
   gdImageDestroy(im);
-
+ }
 }
 
