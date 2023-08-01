@@ -1,0 +1,1 @@
+/usr/bin/gcc -g CMakeFiles/ProjetLibGD.dir/main.c.o -o ProjetLibGD  -lgd 
