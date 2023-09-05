@@ -12,12 +12,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    //Lecture fichier:
 
-    //creation obejet QFile
-    //QFile fichier("main.cpp");
-    //ouverture fichier en lecture seule
-    //fichier.open(QIODevice::ReadOnly);
+
+
 
 
 

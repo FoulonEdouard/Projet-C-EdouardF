@@ -1,6 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include<QFile>
+#include <QApplication>
+#include<QFile>
+#include<QFileDialog>
+#include<QTabBar>
+#include<QTextDocument>
+#include<QDebug>
+#include<QString>
+#include<QIODevice>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -15,6 +23,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void ouvrir_fichier();
 private:
     Ui::MainWindow *ui;
 };
